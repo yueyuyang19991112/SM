@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://192.168.146.129:8066/yue"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:/UserMapper/*.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="www.yyy.dao"/>
+    </bean>
+
+    <bean class="www.yyy.service.UserServiceImpl" id="userService">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+    <bean class="www.yyy.service.PersonServiceImpl" id="personService">
+        <property name="personDao" ref="personDao"/>
+    </bean>
+
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:advice transaction-manager="transactionManager" id="advice">
+        <tx:attributes>
+            <tx:method name="*insert*"/>
+            <tx:method name="*query*" propagation="SUPPORTS"/>
+            <tx:method name="*delete*"/>
+            <tx:method name="*update*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="pc" expression="within(www.yyy.service.*Impl)"/>
+        <aop:advisor advice-ref="advice" pointcut-ref="pc"/>
+    </aop:config>
+
+    <bean class="www.yyy.action.UserAction" id="userAction" scope="prototype">
+        <property name="userService" ref="userService"/>
+    </bean>
+    <bean class="www.yyy.action.PersonAction" id="personAction" scope="prototype">
+        <property name="personService" ref="personService"/>
+    </bean>
+    <bean class="www.yyy.action.CodeAction" id="codeAction" scope="prototype">
+    </bean>
+
+
+</beans>

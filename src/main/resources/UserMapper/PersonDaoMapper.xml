@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.yyy.dao.PersonDao">
+
+    <select id="queryall" resultType="www.yyy.entity.Person">
+        select  id,name,salary,age from person
+    </select>
+
+    <select id="queryById" resultType="www.yyy.entity.Person" parameterType="String">
+        select id,name,salary,age from person where id=#{id}
+    </select>
+
+    <insert id="insertperson" parameterType="www.yyy.entity.Person">
+        insert into person values(#{id},#{name},#{salary},#{age})
+    </insert>
+   <!-- void updateperson(Person person);-->
+    <update id="updateperson" parameterType="www.yyy.entity.Person">
+        update person set name=#{name},salary=#{salary},age=#{age} where id=#{id}
+
+
+    </update>
+
+    <delete id="deleteperson" parameterType="String">
+        delete from person where id=#{id}
+    </delete>
+
+</mapper>

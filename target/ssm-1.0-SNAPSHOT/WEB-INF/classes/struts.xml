@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="user" extends="struts-default" >
+        <action name="queryByName" class="userAction" method="queryByName">
+
+        </action>
+        <action name="userinsert" class="userAction" method="insert">
+
+        </action>
+
+    </package>
+    <package name="code" extends="struts-default">
+        <action name="code" class="codeAction" method="code">
+        </action>
+    </package>
+
+    <package name="person" extends="struts-default" >
+        <action name="queryall" class="personAction" method="queryall">
+            <result name="queryall">/emplist.jsp</result>
+        </action>
+        <action name="insert" class="personAction" method="insert">
+            <result name="insert" type="redirectAction">queryall</result>
+        </action>
+        <action name="delete" method="delete" class="personAction">
+            <result name="delete" type="redirectAction">queryall</result>
+        </action>
+        <action name="queryone" class="personAction" method="queryone">
+            <result name="queryone">updateEmp.jsp</result>
+        </action>
+        <action name="update" class="personAction" method="update">
+            <result name="update" type="redirectAction">queryall</result>
+        </action>
+
+    </package>
+</struts>
